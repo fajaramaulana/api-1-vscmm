@@ -24,19 +24,21 @@ const response = {
   pagination: (
       items = [],
       totalCount = 0,
-      limit = 10,
-      offset = 0,
+      take = 0,
+      skip = 0,
       search = []) => ({
     success: true,
+    code: 200,
+    message: 'Request succeeded',
     meta: {
       totalCount,
-      limit,
-      offset,
+      take,
+      skip,
       search,
     },
     type: 'pagination',
     data: items,
-    message: 'Request succeeded',
+    
   }),
 
   nonPagination: (data = [], message = 'Request succeeded') => ({
