@@ -10,5 +10,6 @@
     },
     "rules": {
         "max-len": "off",
+        "next-line-new-cap": "off",
     }
 }
