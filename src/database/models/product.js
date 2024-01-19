@@ -33,6 +33,10 @@ const Product = sequelize.define('Product', {
     type: DataTypes.DATE,
     allowNull: false,
   },
+  deletedAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
   updatedBy: {
     type: DataTypes.STRING,
     allowNull: false,

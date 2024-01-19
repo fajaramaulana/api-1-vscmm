@@ -42,6 +42,10 @@ const UserRole = sequelize.define(
         allowNull: false,
         defaultValue: 0,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       tableName: 'user_roles',

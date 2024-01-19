@@ -28,6 +28,10 @@ const Permission = sequelize.define(
         allowNull: false,
         defaultValue: DataTypes.NOW,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       updatedBy: {
         type: DataTypes.INTEGER,
         allowNull: false,

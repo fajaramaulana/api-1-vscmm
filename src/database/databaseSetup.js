@@ -24,6 +24,9 @@ async function setupDatabase() {
 
       await Product.sync();
     }
+
+    // alter add column
+
     console.log('Connection has been established successfully.');
 
     // Synchronize Sequelize models with the database
