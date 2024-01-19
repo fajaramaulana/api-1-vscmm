@@ -2,16 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const multer = require('multer');
+
 const Router = require('./src/routes/apiv1');
 const setupDatabase = require('./src/database/databaseSetup')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const upload = multer();
+
 // Use the middleware for all routes or a specific route
-app.use(upload.any());
 app.use(express.json());
 
 app.use(express.static('public'));

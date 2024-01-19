@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const { Product } = require("../database/models");
+const sequelizeCon = require("../configs/sequelize");
 
 const listProductService = async (take, skip, search) => {
     try {
@@ -37,6 +38,83 @@ const listProductService = async (take, skip, search) => {
     }
 }
 
+const createProductService = async (name, price, image, user_login) => {
+    try {
+        const product = await Product.create({
+            product_name: name,
+            product_price: price,
+            product_image: image,
+            createdBy: user_login,
+            created_by: user_login,
+            user_id: user_login
+        })
+        return product;
+    } catch (error) {
+        console.log(`error on createProductService service: ${error}`)
+        throw new Error(error.message)
+    }
+}
+
+const updateProductService = async (name, price, image, productId, user_login) => {
+    try {
+        const updateData = {
+            product_name: name,
+            product_price: price,
+            product_image: image,
+            updatedBy: user_login,
+            updated_by: user_login,
+            user_id: user_login
+        }
+
+        const product = await Product.update(updateData, {
+            where: {
+                product_id: productId
+            }
+        })
+        return product;
+    } catch (error) {
+        console.log(`error on createProductService service: ${error}`)
+        throw new Error(error.message)
+    }
+}
+
+const softDeleteProductService = async (id, userLoginId) => {
+    let transaction
+    try {
+        transaction = await sequelizeCon.transaction();
+        const checkUser = await Product.findOne({
+            where: {
+                product_id: id
+            }
+        })
+
+        if (!checkUser) {
+            throw new Error('Product not found');
+        }
+
+        const updateData = {
+            deletedAt: new Date(),
+        }
+
+        const softDeleteUser = await Product.update(updateData, {
+            where: {
+                product_id: id
+            }
+        })
+
+        // Commit the transaction
+        await transaction.commit();
+
+        return softDeleteUser
+    } catch (error) {
+        console.log(`error on softDeleteProductService service: ${error}`);
+        throw new Error(error.message);
+    }
+}
+
 module.exports = {
-    listProductService
+    listProductService,
+    createProductService,
+    updateProductService,
+    softDeleteProductService
 }
