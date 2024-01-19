@@ -31,6 +31,10 @@ const listUserService = async (take, skip, search) => {
             ];
         }
 
+        options.where.deletedAt = null;
+        options.attributes = ['user_id', 'username', 'name', 'email'];
+        options.order = [['createdAt', 'DESC']];
+
         // Fetch users from the database based on the options
         const users = await User.findAll(options);
 
