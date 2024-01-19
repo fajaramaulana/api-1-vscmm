@@ -6,8 +6,6 @@ const getListUserController = async (req, res, next) => {
 
         const { take, skip, search } = req.query
 
-        
-
         const users = await listUserService(take, skip, search)
 
         const countData = users.length
@@ -29,6 +27,11 @@ const getListUserController = async (req, res, next) => {
 
 const createUserController = async (req, res, next) => {
     try {
+        if (req.user.Roles[0].name !== 'admin') {
+            return res
+            .status(403)
+            .json(response.error('You are not authorized to access this resource', 403))
+        }
         const {name, username, email, password} = req.body
         const userLogin = req.user.user_id
         const user = await createUserService(name, username, email, password, userLogin)
@@ -48,6 +51,11 @@ const createUserController = async (req, res, next) => {
 
 const updateUserController = async (req, res, next) => {
     try {
+        if (req.user.Roles[0].name !== 'admin') {
+            return res
+            .status(403)
+            .json(response.error('You are not authorized to access this resource', 403))
+        }
         const {name, password} = req.body
         const {id} = req.params
         const userLogin = req.user.user_id
@@ -67,6 +75,11 @@ const updateUserController = async (req, res, next) => {
 
 const softDeleteUserController = async (req, res, next) => {
     try {
+        if (req.user.Roles[0].name !== 'admin') {
+            return res
+            .status(403)
+            .json(response.error('You are not authorized to access this resource', 403))
+        }
         const {id} = req.params
         const userLogin = req.user.user_id
 
