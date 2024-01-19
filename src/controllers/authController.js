@@ -1,4 +1,3 @@
-// const { registerUserService } = require('../services/authServices')
 const response = require('../utils/response')
 const { registerUserService, loginUserService } = require('../services/authServices')
 
