@@ -98,7 +98,86 @@ const createUserService = async (name, username, email, password, userLoginId) =
     }
 }
 
+const updateUserService = async (name, password, id, userLoginId) => {
+    let transaction
+    try {
+        const checkUser = await User.findOne({
+            where: {
+                user_id: id
+            }
+        })
+
+        if (!checkUser) {
+            throw new Error('User not found');
+        }
+
+        transaction = await sequelizeCon.transaction();
+        let updateField = {
+            name: name,
+            updatedAt: new Date(),
+            updatedBy: 1
+        }
+
+        if (password) {
+            const hashPasswordUpdate = await hashPassword(password);
+            updateField.password = hashPasswordUpdate
+        }
+
+        const updateUser = await User.update(updateField, {
+            where: {
+                user_id: id
+            }
+        })
+
+        // Commit the transaction
+        await transaction.commit();
+
+        return updateUser
+        
+    } catch (error) {
+        console.log(`error on updateUserService service: ${error}`);
+        throw new Error(error.message);
+    }
+
+}
+
+const softDeleteUserService = async (id, userLoginId) => {
+    let transaction
+    try {
+        transaction = await sequelizeCon.transaction();
+        const checkUser = await User.findOne({
+            where: {
+                user_id: id
+            }
+        })
+
+        if (!checkUser) {
+            throw new Error('User not found');
+        }
+
+        const updateData = {
+            deletedAt: new Date(),
+        }
+
+        const softDeleteUser = await User.update(updateData, {
+            where: {
+                user_id: id
+            }
+        })
+
+        // Commit the transaction
+        await transaction.commit();
+
+        return softDeleteUser
+    } catch (error) {
+        console.log(`error on softDeleteUserService service: ${error}`);
+        throw new Error(error.message);
+    }
+}
+
 module.exports = {
     listUserService,
-    createUserService
+    createUserService,
+    updateUserService,
+    softDeleteUserService
 }
